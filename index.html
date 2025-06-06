@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cozy Pixel Timer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <div class="cabin-scene">
+            <div class="window"></div>
+            <div class="fireplace">
+                <div class="fire"></div>
+            </div>
+            
+            <div class="rug"></div>
+            <div class="creature" id="creature">
+                <span></span><span></span>
+            </div>
+        </div>
+
+        <div class="app-title">Cozy Timer</div>
+
+        <div class="timer-controls">
+            <div class="timer-display" id="timerDisplay">00:00:00</div>
+
+            <div class="input-group">
+                <input type="number" id="hoursInput" value="0" min="0" max="99">
+                <label for="hoursInput">hr</label>
+
+                <input type="number" id="minutesInput" value="0" min="0" max="59">
+                <label for="minutesInput">min</label>
+
+                <input type="number" id="secondsInput" value="0" min="0" max="59">
+                <label for="secondsInput">sec</label>
+            </div>
+
+            <div class="buttons">
+                <button id="startButton">Start</button>
+                <button id="pauseButton">Pause</button>
+                <button id="resetButton">Reset</button>
+            </div>
+        </div>
+
+        <div class="settings-bar">
+            <label for="chimeSelect">Chime Sound:</label>
+            <select id="chimeSelect">
+                <option value="assets/chime.mp3">Classic Chime</option>
+                <option value="assets/bell_ding.mp3"> Ding</option>
+                <option value="assets/soft_chime.mp3">Soft Beat</option>
+                <option value="assets/gong.mp3">Space</option>
+                <option value="assets/xylophone.mp3">Averge Lofi</option>
+            </select>
+        </div>
+
+    </div>
+
+    <audio id="chimeSound" src="assets/chime.mp3" preload="auto"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>

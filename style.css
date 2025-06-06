@@ -1,0 +1,342 @@
+/* Universal Box-Sizing for Easier Layout */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* Base Styles & Global Pixelated Rendering (kept for other elements) */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #5C4033; /* Warm Dark Brown */
+    font-family: 'Press Start 2P', cursive; /* Apply pixel font */
+    color: #E6D8C8; /* Creamy White */
+    text-shadow: 2px 2px 0px #4D342D; /* Subtle pixelated text shadow */
+
+    image-rendering: optimizeSpeed; /* Older Safari */
+    image-rendering: -moz-crisp-edges; /* Firefox */
+    image-rendering: -webkit-optimize-contrast; /* Webkit (non-standard) */
+    image-rendering: pixelated; /* Modern browsers */
+}
+
+/* App Container */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px; /* Space between scene and controls */
+    padding: 30px;
+    border: 3px solid #A08060; /* Woody Border */
+    background-color: #7A5C4B; /* Darker Brown for Container Background */
+    border-radius: 8px; /* Slightly rounded corners */
+    box-shadow: 6px 6px 0px 0px #4D342D; /* Pixelated shadow effect */
+    width: clamp(320px, 90vw, 550px); /* Slightly wider to accommodate new inputs */
+    position: relative; /* For absolute positioning of scene elements if needed */
+    overflow: hidden; /* Hide any overflow from scene */
+}
+
+/* Cabin Scene */
+.cabin-scene {
+    width: 100%;
+    height: 150px; /* Adjust based on desired scene height */
+    background-color: #8C6A5A; /* Cabin Wall Color */
+    border: 2px solid #5C4033; /* Cabin Outline */
+    border-radius: 4px;
+    position: relative; /* Keep this for absolute positioning of window/fireplace/creature */
+    overflow: hidden;
+}
+
+/* Pixel Art Elements within the Cabin Scene */
+.window {
+    width: 60px;
+    height: 60px;
+    background-color: #A0B0C0; /* Muted Blue for Glass */
+    border: 2px solid #5C4033; /* Window Frame */
+    box-shadow: 2px 2px 0px 0px #4D342D; /* Frame shadow */
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 2px; /* For window panes */
+}
+.window::before, .window::after {
+    content: '';
+    background-color: rgba(255, 255, 255, 0.2); /* Subtle highlight */
+    position: absolute;
+}
+.window::before { /* Vertical pane divider */
+    width: 2px;
+    height: 100%;
+    left: 50%;
+    transform: translateX(-1px);
+}
+.window::after { /* Horizontal pane divider */
+    width: 100%;
+    height: 2px;
+    top: 50%;
+    transform: translateY(-1px);
+}
+
+/* Original Fireplace & Fire */
+.fireplace {
+    width: 80px;
+    height: 70px;
+    background-color: #3D291D; /* Darker brick color */
+    border: 2px solid #2A1D15;
+    position: absolute;
+    bottom: 0;
+    right: 20px;
+    overflow: hidden; /* For the fire inside */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Fire at the bottom */
+}
+
+.fire { /* Nested div for the fire within the fireplace */
+    width: 50px;
+    height: 40px;
+    background-color: #FF6600; /* Orange fire color */
+    position: relative;
+    animation: flicker 0.5s infinite alternate; /* Simple fire animation */
+}
+.fire::before, .fire::after { /* Yellow/red embers */
+    content: '';
+    position: absolute;
+    background-color: #FFCC00;
+    border-radius: 50%;
+    opacity: 0.7;
+}
+.fire::before {
+    width: 20px; height: 20px; left: 5px; bottom: 0;
+    background-color: #FF3300;
+}
+.fire::after {
+    width: 15px; height: 15px; right: 5px; bottom: 0;
+    background-color: #FFCC00;
+}
+
+/* Animation for fire flicker */
+@keyframes flicker {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.95; }
+    100% { transform: scale(0.98); opacity: 1; }
+}
+
+/* Rug Styling */
+.rug {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%); /* Center the rug */
+    width: 150px;
+    height: 30px;
+    background-color: #D4A76A; /* Muted orange for rug */
+    border: 2px solid #A08060; /* Woody border */
+    border-radius: 4px 4px 0 0; /* Rounded top corners */
+    box-shadow: 2px 2px 0px 0px #4D342D;
+    z-index: 1; /* Ensure rug is below creature */
+}
+
+/* Cozy CSS-Drawn Creature (Spirit/Dust Bunny) Styling */
+.creature {
+    position: absolute;
+    width: 30px; /* Size of the spirit body */
+    height: 25px;
+    background-color: #F8F8E6; /* Soft, warm white for the spirit */
+    border-radius: 50% 50% 10% 10%; /* Rounded top, slightly flat bottom */
+    box-shadow: 0 0 8px 2px rgba(255, 255, 200, 0.6); /* Subtle glow */
+    bottom: 15px; /* Position above rug/floor */
+    left: 50%;
+    transform: translateX(-50%); /* Initial center position */
+    z-index: 2; /* Ensure creature is above rug */
+    transform-origin: center bottom; /* For animations */
+    transition: transform 0.2s ease-out; /* Smooth transition for state changes */
+}
+
+/* Spirit Eyes (using span elements inside .creature) */
+.creature span {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background-color: #5C4033; /* Dark brown for eyes */
+    border-radius: 50%; /* Make them round */
+    top: 8px; /* Position on the face */
+}
+.creature span:first-child { left: 7px; } /* Left eye */
+.creature span:last-child { right: 7px; } /* Right eye */
+
+/* Creature Walking Animation */
+.creature-walking {
+    animation: walk-cycle 6s infinite linear; /* Slower 6s cycle */
+}
+@keyframes walk-cycle {
+    0% { transform: translateX(-50%) translateX(-60px); } /* Start far left */
+    25% { transform: translateX(-50%) translateX(60px); }  /* Move to far right */
+    50% { transform: translateX(-50%) translateX(-60px); }  /* Move back to far left */
+    75% { transform: translateX(-50%) translateX(60px); } /* Move to far right */
+    100% { transform: translateX(-50%) translateX(-60px); } /* Complete cycle back to start */
+}
+
+/* Creature Sitting State */
+.creature-sitting {
+    transform: translateX(-50%) translateY(5px) scale(0.9); /* Squish down slightly and move down */
+    animation: none; /* Stop walking animation when sitting */
+}
+
+/* Creature Idle State */
+.creature-idle {
+    animation: breathe 2s infinite alternate, float 3s infinite ease-in-out; /* Subtle breathing + floating */
+}
+@keyframes breathe {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.02); } /* Subtle size change */
+}
+@keyframes float {
+    0%, 100% { transform: translateX(-50%) translateY(0px); }
+    50% { transform: translateX(-50%) translateY(-5px); } /* Subtle up/down float */
+}
+
+/* App Title Styling */
+.app-title {
+    font-size: 36px; /* Adjust size as needed */
+    color: #FFDDAA; /* Lighter, warm color for the title */
+    text-align: center;
+    margin-bottom: 20px; /* Space between title and timer */
+    text-shadow: 4px 4px 0px #4D342D; /* Stronger pixelated text shadow */
+    letter-spacing: 2px; /* Slightly space out letters for pixel font */
+}
+
+
+/* Timer Controls */
+.timer-controls {
+    text-align: center;
+}
+
+.timer-display {
+    font-size: 56px; /* Slightly smaller to fit HH:MM:SS */
+    margin-bottom: 20px;
+    line-height: 1; /* Prevent extra space */
+    color: #FFDDAA; /* Lighter, warm color for the display */
+}
+
+/* Input Group */
+.input-group {
+    margin-bottom: 20px;
+    display: flex; /* Use flexbox for horizontal layout */
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap; /* Allow inputs to wrap on smaller screens */
+    gap: 10px 5px; /* Vertical and horizontal gap between items */
+}
+
+input[type="number"] {
+    width: 60px; /* Make inputs a bit narrower */
+    padding: 8px 5px; /* Adjust padding */
+    border: 2px solid #A08060;
+    background-color: #E6D8C8; /* Creamy input background */
+    color: #5C4033; /* Dark brown text */
+    font-family: 'Press Start 2P', cursive;
+    font-size: 16px; /* Slightly smaller font for inputs */
+    text-align: center;
+    border-radius: 4px;
+    box-shadow: 2px 2px 0px 0px #4D342D;
+    outline: none; /* Remove default focus outline */
+}
+
+input[type="number"]:focus {
+    border-color: #D4A76A; /* Highlight on focus */
+}
+
+label {
+    font-size: 14px; /* Slightly smaller for labels */
+    color: #E6D8C8;
+    text-shadow: none; /* No shadow for labels */
+    margin-right: 5px; /* Space after label */
+}
+
+/* Buttons */
+.buttons {
+    display: flex;
+    gap: 15px; /* Space between buttons */
+    justify-content: center;
+}
+
+button {
+    background-color: #D4A76A; /* Muted Orange Button */
+    color: #5C4033; /* Dark Brown Text */
+    border: 2px solid #A08060;
+    padding: 12px 20px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 4px;
+    box-shadow: 4px 4px 0px 0px #A08060; /* Pixelated button shadow */
+    transition: all 0.1s ease; /* Subtle transition for press effect */
+    outline: none;
+}
+
+button:hover {
+    background-color: #E6B87B; /* Slightly lighter on hover */
+}
+
+button:active {
+    transform: translate(2px, 2px); /* Simulates button press */
+    box-shadow: 2px 2px 0px 0px #A08060; /* Smaller shadow when pressed */
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none; /* No shadow when disabled */
+    transform: none;
+}
+
+/* NEW: Settings Bar Styling */
+.settings-bar {
+    margin-top: 20px; /* Space above the settings */
+    display: flex;
+    flex-direction: column; /* Stack label and select */
+    align-items: center;
+    gap: 10px; /* Space between label and select */
+    width: 100%; /* Take full width of container */
+    padding: 10px 0;
+    border-top: 2px dashed #A08060; /* A dashed separator line */
+    border-bottom: 2px dashed #A08060; /* A dashed separator line */
+}
+
+.settings-bar label {
+    font-size: 16px;
+    color: #E6D8C8;
+    text-shadow: 2px 2px 0px #4D342D; /* Consistent text shadow */
+    margin-bottom: 5px; /* Space between label and dropdown */
+}
+
+#chimeSelect {
+    background-color: #E6D8C8; /* Creamy input background */
+    color: #5C4033; /* Dark brown text */
+    border: 2px solid #A08060;
+    padding: 8px 10px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 16px;
+    border-radius: 4px;
+    box-shadow: 2px 2px 0px 0px #4D342D;
+    outline: none;
+    cursor: pointer;
+    /* Custom styling for dropdown arrow */
+    -webkit-appearance: none; /* Remove default arrow on Webkit browsers */
+    -moz-appearance: none;    /* Remove default arrow on Firefox */
+    appearance: none;         /* Remove default arrow on standard browsers */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%235C4033%22%20d%3D%22M287%2069.9H5.4c-6.8%200-10.8%208.1-6.9%2013.3l140.7%20141.4c3.9%203.9%2010.1%203.9%2014%200l140.7-141.4c3.9-5.2-.1-13.3-6.9-13.3z%22%2F%3E%3C%2Fsvg%3E'); /* Custom SVG arrow */
+    background-repeat: no-repeat;
+    background-position: right 8px top 50%; /* Position the arrow */
+    background-size: 12px auto; /* Size the arrow */
+    padding-right: 30px; /* Make space for the custom arrow */
+}
+
+#chimeSelect:focus {
+    border-color: #D4A76A; /* Highlight on focus */
+}
